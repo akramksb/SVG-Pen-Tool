@@ -4,8 +4,8 @@ canvas = document.querySelector(".pentoolSVG")
 const svgns = "http://www.w3.org/2000/svg";
 const curveStyle = "fill: none; stroke: green; stroke-width: 2px;";
 const curveStylePreview = "fill: none; stroke: #1a7d1a96; stroke-width: 1px;";
-const tangentStyle = "fill: none; stroke: rgb(212, 131, 39) ;stroke-width: 1.5px;";
-const dotStyle = "fill: rgb(235, 190, 43); stroke: none;";
+const tangentStyle = "fill: none; stroke: rgb(221 163 97) ;stroke-width: 1.3px;";
+const dotStyle = "fill: rgb(221 163 97); stroke: none;";
 
 let bezierCurve = [];
 let started = false;
@@ -218,19 +218,30 @@ canvas.addEventListener('mouseup', e => {
         // isCtr0 = true
     }
     else if (finished) {
-        let dx, dy;
-        dx = e.offsetX - bezierCurve.at(-1).x
-        dy = e.offsetY - bezierCurve.at(-1).y
+        let dx, dy, pt2;
+        pt2 = bezierCurve.at(-1);
+        dx = e.offsetX - pt2.x
+        dy = e.offsetY - pt2.y
         // insert into index : 2  .splice(2, 0, Obj)
         bezierCurve.splice(2, 0, {
-            x: bezierCurve.at(-1).x - dx,
-            y: bezierCurve.at(-1).y - dy
+            x: pt2.x - dx,
+            y: pt2.y - dy
         })
 
         drawBezierCurve(bezierCurve, true)
-        started = false
+        started = true
         finished = false
         bezierCurve = []
+        bezierCurve.push( {
+            x: pt2.x,
+            y: pt2.y
+        },
+        {
+            x: e.offsetX,
+            y: e.offsetY
+        } )
+        console.log( bezierCurve )
+        
     }
 })
 body.addEventListener('mouseup', e => {
